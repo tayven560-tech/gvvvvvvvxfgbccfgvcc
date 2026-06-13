@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>CrystalCode</title>
+
+<style>
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: Arial, sans-serif;
+  color: white;
+  background: black;
+}
+
+/* 🌌 Nebula background */
+.nebula {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 20%, #1e293b, transparent 40%),
+              radial-gradient(circle at 80% 30%, #0ea5e9, transparent 40%),
+              radial-gradient(circle at 50% 80%, #9333ea, transparent 40%);
+  filter: blur(45px);
+  opacity: 0.7;
+  animation: drift 12s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes drift {
+  from { transform: translate(0px, 0px) scale(1); }
+  to { transform: translate(40px, -30px) scale(1.1); }
+}
+
+/* ⭐ Stars canvas */
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1;
+}
+
+/* 📦 Center content */
+.content {
+  position: relative;
+  z-index: 2;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* 💎 CRYSTAL TITLE */
+.title {
+  font-size: 4rem;
+  font-weight: bold;
+
+  /* crystal gradient */
+  background: linear-gradient(90deg, #38bdf8, #a78bfa, #22d3ee, #38bdf8);
+  background-size: 300%;
+
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
+  animation: shine 4s linear infinite;
+
+  text-shadow:
+    0 0 10px rgba(56,189,248,0.6),
+    0 0 20px rgba(167,139,250,0.4);
+}
+
+/* shimmer animation */
+@keyframes shine {
+  0% { background-position: 0% }
+  100% { background-position: 300% }
+}
+
+/* 💠 subtitle */
+p {
+  opacity: 0.8;
+  max-width: 500px;
+}
+
+/* 🚀 button */
+button {
+  margin-top: 20px;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 10px;
+  background: #38bdf8;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  transform: scale(1.1);
+  box-shadow: 0 0 25px #38bdf8;
+}
+
+/* 💎 floating crystals */
+.crystal {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: linear-gradient(45deg, #38bdf8, #a78bfa);
+  transform: rotate(45deg);
+  opacity: 0.8;
+  animation: floatUp 6s linear infinite;
+}
+
+@keyframes floatUp {
+  from { transform: translateY(100vh) rotate(45deg); }
+  to { transform: translateY(-10vh) rotate(45deg); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="nebula"></div>
+<canvas id="stars"></canvas>
+
+<div class="content">
+  <div class="title">💎 CrystalCode</div>
+  <p>Build. Create. Launch. A universe of code and imagination.</p>
+  <button onclick="alert('Launching CrystalCode 🚀')">Enter</button>
+</div>
+
+<script>
+// ⭐ STAR FIELD
+const canvas = document.getElementById("stars");
+const ctx = canvas.getContext("2d");
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let stars = [];
+
+for (let i = 0; i < 150; i++) {
+  stars.push({
+    x: Math.random() * canvas.width,
+    y: Math.random() * canvas.height,
+    size: Math.random() * 2,
+    speed: Math.random() * 0.5 + 0.2
+  });
+}
+
+function animateStars() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = "white";
+
+  for (let s of stars) {
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.size, 0, Math.PI * 2);
+    ctx.fill();
+
+    s.y += s.speed;
+
+    if (s.y > canvas.height) {
+      s.y = 0;
+      s.x = Math.random() * canvas.width;
+    }
+  }
+
+  requestAnimationFrame(animateStars);
+}
+
+animateStars();
+
+// 💎 floating crystals generator
+for (let i = 0; i < 25; i++) {
+  let c = document.createElement("div");
+  c.className = "crystal";
+  c.style.left = Math.random() * window.innerWidth + "px";
+  c.style.animationDuration = (4 + Math.random() * 4) + "s";
+  c.style.opacity = Math.random();
+  document.body.appendChild(c);
+}
+
+// resize fix
+window.addEventListener("resize", () => {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+});
+</script>
+
+</body>
+</html>
